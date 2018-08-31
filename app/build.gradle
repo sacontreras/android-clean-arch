@@ -1,0 +1,103 @@
+apply plugin: 'com.android.application'
+
+apply plugin: 'kotlin-android'
+
+apply plugin: 'kotlin-android-extensions'
+
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion 27
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    def appPropsFile = file('./src/main/assets/application.properties')
+    Properties appProps = new Properties()
+    String locationweatherws_api_key
+    if (!appPropsFile.canRead())
+        throw new GradleException("Could not read weatherLocApp.properties! This file is required as it provides values to the weatherLocApp which are necessary at runtime.")
+    appProps.load(new FileInputStream(appPropsFile))
+    locationweatherws_api_key = appProps['lws.apikey']
+    if (locationweatherws_api_key == null || locationweatherws_api_key.trim().isEmpty() || locationweatherws_api_key.compareTo("YOUR_LOCATION_WEATHER_SERVICE_API_KEY") == 0)
+        throw new GradleException(String.format("failed read: %s 'lws.apikey' not set", appPropsFile.getCanonicalPath()))
+
+    defaultConfig {
+        applicationId "com.codingexercise.verve.stevencontreras.weatherlocationapp"
+        minSdkVersion 16
+        targetSdkVersion 27
+        multiDexEnabled true
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$versions.kotlin"
+    implementation "com.android.support:appcompat-v7:$versions.support"
+    implementation "com.android.support:design:$versions.support"
+    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
+
+    //anko - buttknife-like features plus a whole lot more (for kotlin) - see https://www.kotlinresources.com/library/anko/
+    implementation 'org.jetbrains.anko:anko-commons:0.10.3'
+
+    //ORM for entities - similar to spring-data-jpa - but specific to sqlite (Android)
+    implementation 'org.greenrobot:greendao:3.2.2'
+
+    // https://mvnrepository.com/artifact/org.modelmapper/modelmapper
+    implementation 'org.modelmapper:modelmapper:2.2.0'
+
+    //google maps
+    implementation 'com.google.android.gms:play-services-maps:15.0.1'
+
+    //RecyclerView (mem optimized listview)
+    implementation "com.android.support:cardview-v7:$versions.support"
+    implementation "com.android.support:recyclerview-v7:$versions.support"
+    implementation "com.android.support:design:$versions.support"
+
+    //architecture - see https://developer.android.com/jetpack (Architecture)
+    implementation "android.arch.lifecycle:runtime:$versions.andro_arch"
+    kapt "android.arch.lifecycle:compiler:$versions.andro_arch"
+    implementation "android.arch.lifecycle:common-java8:$versions.andro_arch"
+    implementation "android.arch.lifecycle:extensions:$versions.andro_arch"
+    implementation "android.arch.lifecycle:reactivestreams:$versions.andro_arch"
+
+    //retrofit - restful api client made easy!
+    implementation "com.squareup.retrofit2:retrofit:$versions.retrofit"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$versions.retrofit"
+    implementation "com.squareup.retrofit2:converter-gson:$versions.retrofit"
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.9.1'
+
+    //rx (reactive - observable streams)
+    implementation "io.reactivex.rxjava2:rxjava:2.1.8"
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    implementation 'io.reactivex.rxjava2:rxkotlin:2.2.0'
+
+    //dagger2 - dependency injection
+    kapt "com.google.dagger:dagger-compiler:$versions.dagger"
+    implementation "com.google.dagger:dagger-android:$versions.dagger"
+    implementation "com.google.dagger:dagger-android-support:$versions.dagger"
+    kapt "com.google.dagger:dagger-android-processor:$versions.dagger"
+
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.mockito:mockito-core:2.10.0'
+    testImplementation "android.arch.core:core-testing:$versions.andro_arch"
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
+    //kaptTest and kaptAndroidTest enables annotation processors for androidTest - in order for us to use dagger DI therein
+    kaptTest "com.google.dagger:dagger-compiler:$versions.dagger"
+    kaptAndroidTest "com.google.dagger:dagger-compiler:$versions.dagger"
+}
