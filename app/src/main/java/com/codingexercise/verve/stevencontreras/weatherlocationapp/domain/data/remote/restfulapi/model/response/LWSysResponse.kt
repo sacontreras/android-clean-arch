@@ -1,13 +1,13 @@
-package com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.data.remote.restfulapi.model
+package com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.data.remote.restfulapi.model.response
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-class LWSys {
+class LWSysResponse {
 
     @SerializedName("type")
     @Expose
-    var type: Int? = null
+    var type: Double? = null
     @SerializedName("id")
     @Expose
     var id: Int? = null

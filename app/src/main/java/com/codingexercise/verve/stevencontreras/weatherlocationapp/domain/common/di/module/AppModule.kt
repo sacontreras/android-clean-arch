@@ -1,4 +1,4 @@
-package com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.common.di.modules
+package com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.common.di.module
 
 import android.app.Application
 import android.content.Context
@@ -10,7 +10,7 @@ import javax.inject.Singleton
 class AppModule(private val application: Application) {
     @Provides
     @Singleton
-    fun provideAppContext(): Context {
+    fun provideApp(): Application {
         return application
     }
 }

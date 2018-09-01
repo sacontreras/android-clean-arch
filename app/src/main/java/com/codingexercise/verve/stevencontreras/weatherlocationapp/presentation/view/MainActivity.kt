@@ -18,8 +18,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        (application as WeatherLocApp).getWeatherLocAppComponent()
-            .inject(this)
+        (application as WeatherLocApp).getWeatherLocAppComponent().inject(this)
 
 
         fab.setOnClickListener { view ->

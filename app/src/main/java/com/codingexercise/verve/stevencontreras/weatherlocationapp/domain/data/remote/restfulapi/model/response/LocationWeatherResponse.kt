@@ -1,37 +1,37 @@
-package com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.data.remote.restfulapi.model
+package com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.data.remote.restfulapi.model.response
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-class LocationWeather {
+class LocationWeatherResponse {
 
     @SerializedName("coord")
     @Expose
-    var coord: LWCoord? = null
+    var coord: LWCoordResponse? = null
     @SerializedName("weather")
     @Expose
-    var weather: List<LWWeather>? = null
+    var weather: List<LWWeatherResponse>? = null
     @SerializedName("base")
     @Expose
     var base: String? = null
     @SerializedName("main")
     @Expose
-    var main: LWMain? = null
+    var main: LWMainResponse? = null
     @SerializedName("visibility")
     @Expose
-    var visibility: Int? = null
+    var visibility: Double? = null
     @SerializedName("wind")
     @Expose
-    var wind: LWWind? = null
+    var wind: LWWindResponse? = null
     @SerializedName("clouds")
     @Expose
-    var clouds: LWClouds? = null
+    var clouds: LWCloudsResponse? = null
     @SerializedName("dt")
     @Expose
     var dt: Int? = null
     @SerializedName("sys")
     @Expose
-    var sys: LWSys? = null
+    var sys: LWSysResponse? = null
     @SerializedName("id")
     @Expose
     var id: Int? = null

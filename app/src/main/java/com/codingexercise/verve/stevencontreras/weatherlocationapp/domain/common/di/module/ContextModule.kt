@@ -1,4 +1,4 @@
-package com.codingexercise.verve.stevencontreras.weatherlocationapp.instrumentedtest.domain.common.di.modules
+package com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.common.di.module
 
 import android.content.Context
 import dagger.Module

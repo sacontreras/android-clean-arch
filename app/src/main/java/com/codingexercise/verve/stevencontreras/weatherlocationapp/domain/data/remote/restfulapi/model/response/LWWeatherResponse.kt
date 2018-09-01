@@ -1,9 +1,9 @@
-package com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.data.remote.restfulapi.model
+package com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.data.remote.restfulapi.model.response
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-class LWWeather {
+class LWWeatherResponse {
 
     @SerializedName("id")
     @Expose

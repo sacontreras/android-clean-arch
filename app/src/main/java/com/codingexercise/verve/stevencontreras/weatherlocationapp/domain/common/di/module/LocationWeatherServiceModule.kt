@@ -1,4 +1,4 @@
-package com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.common.di.modules
+package com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.common.di.module
 
 import com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.data.remote.restfulapi.LocationWeatherService
 import dagger.Module
@@ -11,7 +11,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 @Module
 class LocationWeatherServiceModule {
     companion object {
-        const val BASE_URL: String = "api.openweathermap.org"
+        const val BASE_URL: String = "https://api.openweathermap.org"
     }
 
     @Provides //roughly equivalent to "@Bean" in Spring
@@ -26,7 +26,7 @@ class LocationWeatherServiceModule {
         return Retrofit.Builder()
             .baseUrl(baseUrl)
             .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create()) //maps body to json representation of LocationWeather model
+            .addConverterFactory(GsonConverterFactory.create()) //maps body to json representation of LocationWeatherResponse model
             .build()
     }
 

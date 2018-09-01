@@ -7,7 +7,7 @@ import org.greenrobot.greendao.annotation.Property
 
 
 @Entity(nameInDb = "locationweather")
-data class LocationWeather @JvmOverloads constructor(
+data class LocationWeatherEntity @JvmOverloads constructor(
     @Id(autoincrement = true)
     var id: Long = -1,
 
