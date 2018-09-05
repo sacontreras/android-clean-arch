@@ -21,9 +21,16 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/locationweatherhistory_content" />
-
-    <include layout="@layout/map_content" />
+    <include layout="@layout/locationweatherhistory_content"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_width="350dp"
+        android:layout_height="match_parent" />
+    <include layout="@layout/map_content"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_marginLeft="350dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

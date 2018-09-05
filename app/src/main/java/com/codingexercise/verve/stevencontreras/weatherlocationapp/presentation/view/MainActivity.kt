@@ -30,12 +30,16 @@ import com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.reposi
 import com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.repository.LocationWeatherProvider
 import com.codingexercise.verve.stevencontreras.weatherlocationapp.presentation.common.util.Alerts
 import com.codingexercise.verve.stevencontreras.weatherlocationapp.presentation.common.util.Permissions
-
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.find
 import javax.inject.Inject
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     companion object {
         private val TAG = MainActivity::class.java.simpleName
         private const val ALL_PERMISSIONS_RESULT = 101
@@ -54,6 +58,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var rv_locweatherhistory: RecyclerView
     private var rv_locweatherhistory_adapter: MyRecyclerViewAdapter? = null
 
+    private lateinit var mMap: GoogleMap
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,6 +70,9 @@ class MainActivity : AppCompatActivity() {
 
         rv_locweatherhistory = find(R.id.rv_locweatherhistory)
         rv_locweatherhistory.layoutManager = LinearLayoutManager(this)
+
+        val mapFragment = supportFragmentManager.findFragmentById(R.id.fragment_map) as SupportMapFragment
+        mapFragment.getMapAsync(this)
 
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Location Service", Snackbar.LENGTH_LONG)
@@ -78,6 +87,10 @@ class MainActivity : AppCompatActivity() {
                 }
                 .show()
         }
+    }
+
+    override fun onMapReady(p0: GoogleMap?) {
+        mMap = p0!!
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -122,6 +135,13 @@ class MainActivity : AppCompatActivity() {
                     }
                 } else {
                     Log.d(TAG, "All missing permissions have been granted - proceed to start location updates")
+                    if (startLocationUpdates != null)
+                        startLocationUpdates!!.dispose()
+                    startLocationUpdates = StartLocationUpdates(locationUpdateProvider)
+                    startLocationUpdates!!.execute(
+                        MyLocationEventObserver(this@MainActivity),
+                        null
+                    )
                 }
             }
         }
@@ -157,6 +177,17 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 Event.LOCATION_CHANGED -> {
+                    activity.runOnUiThread {
+                        activity.mMap.moveCamera(
+                            CameraUpdateFactory.newLatLngZoom(
+                                LatLng(
+                                    t.coord!!.lat!!,
+                                    t.coord!!.lon!!
+                                ),
+                                10.0F
+                            )
+                        )
+                    }
                     if (activity.getCurrentLocationWeather != null)
                         activity.getCurrentLocationWeather!!.dispose()
                     activity.getCurrentLocationWeather = GetCurrentLocationWeather(activity.locationWeatherProvider)
