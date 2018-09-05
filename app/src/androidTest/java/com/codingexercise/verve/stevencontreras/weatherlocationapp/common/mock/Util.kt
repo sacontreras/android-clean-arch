@@ -1,6 +1,6 @@
 package com.codingexercise.verve.stevencontreras.weatherlocationapp.common.mock
 
-import com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.model.LocationWeather
+import com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.model.location.weather.LocationWeather
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser

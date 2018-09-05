@@ -9,12 +9,12 @@ import com.codingexercise.verve.stevencontreras.weatherlocationapp.common.di.Tes
 import com.codingexercise.verve.stevencontreras.weatherlocationapp.common.mock.Util
 import com.codingexercise.verve.stevencontreras.weatherlocationapp.data.repository.locationweatherhistory.database.di.LocationWeatherDatabaseClientModule
 import com.codingexercise.verve.stevencontreras.weatherlocationapp.data.repository.locationweatherprovider.webserviceclient.di.LocationWeatherWebServiceClientModule
-import com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.interactor.usecase.addnewlocationweatherhistory.AddNewHistory
-import com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.interactor.usecase.addnewlocationweatherhistory.AddNewHistoryResultObserver
-import com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.interactor.usecase.deletelocationweatherhistory.DeleteHistory
-import com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.interactor.usecase.deletelocationweatherhistory.DeleteHistoryResultObserver
-import com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.interactor.usecase.getlocationweatherhistory.GetHistory
-import com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.interactor.usecase.getlocationweatherhistory.GetHistoryResultObserver
+import com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.interactor.usecase.location.weather.history.AddNewLocationWeatherHistory
+import com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.interactor.usecase.location.weather.history.AddNewLocationWeatherHistoryResultObserver
+import com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.interactor.usecase.location.weather.history.DeleteLocationWeatherHistory
+import com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.interactor.usecase.location.weather.history.DeleteLocationWeatherHistoryResultObserver
+import com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.interactor.usecase.location.weather.history.GetLocationWeatherHistory
+import com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.interactor.usecase.location.weather.history.GetLocationWeatherHistoryResultObserver
 import junit.framework.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -33,30 +33,30 @@ class LocationWeatherDbIntegrationTest {
         val testDependencyInjectionTarget = DependencyInjectionTarget()
         testDependenciesComponent.inject(testDependencyInjectionTarget)
         val waitObject = Object()
-        val addNewLocationWeather = AddNewHistory(testDependencyInjectionTarget.locationWeatherHistoryRepository)
-        var addNewHistoryResultObserver: AddNewHistoryResultObserver?
+        val addNewLocationWeather = AddNewLocationWeatherHistory(testDependencyInjectionTarget.locationWeatherHistoryRepository)
+        var addNewLocationWeatherHistoryResultObserver: AddNewLocationWeatherHistoryResultObserver?
 
         //Act - insert Util.Fixed.mockLW[0]
-        addNewHistoryResultObserver = AddNewHistoryResultObserver(waitObject)
-        addNewLocationWeather.execute(addNewHistoryResultObserver, Util.Fixed.mockLW[0])
-        addNewHistoryResultObserver.awaitCompletion(5000)
+        addNewLocationWeatherHistoryResultObserver = AddNewLocationWeatherHistoryResultObserver(waitObject)
+        addNewLocationWeather.execute(addNewLocationWeatherHistoryResultObserver, Util.Fixed.mockLW[0])
+        addNewLocationWeatherHistoryResultObserver.awaitCompletion(5000)
 
         //Assert - assert matching results from addNewResult of observer
-        Assert.assertNotNull(addNewHistoryResultObserver.addNewResult)
-        Assert.assertEquals(1, addNewHistoryResultObserver.addNewResult.lwdid)
-        Assert.assertEquals(1, addNewHistoryResultObserver.addNewResult.wid.size)
-        Assert.assertEquals(1, addNewHistoryResultObserver.addNewResult.wid[0])
+        Assert.assertNotNull(addNewLocationWeatherHistoryResultObserver.addNewResult)
+        Assert.assertEquals(1, addNewLocationWeatherHistoryResultObserver.addNewResult.lwdid)
+        Assert.assertEquals(1, addNewLocationWeatherHistoryResultObserver.addNewResult.wid.size)
+        Assert.assertEquals(1, addNewLocationWeatherHistoryResultObserver.addNewResult.wid[0])
 
         //Act - insert Util.Fixed.mockLW[1]
-        addNewHistoryResultObserver = AddNewHistoryResultObserver(waitObject)
-        addNewLocationWeather.execute(addNewHistoryResultObserver, Util.Fixed.mockLW[1])
-        addNewHistoryResultObserver.awaitCompletion(5000)
+        addNewLocationWeatherHistoryResultObserver = AddNewLocationWeatherHistoryResultObserver(waitObject)
+        addNewLocationWeather.execute(addNewLocationWeatherHistoryResultObserver, Util.Fixed.mockLW[1])
+        addNewLocationWeatherHistoryResultObserver.awaitCompletion(5000)
 
         //Assert - assert matching results from addNewResult of observer
-        Assert.assertNotNull(addNewHistoryResultObserver.addNewResult)
-        Assert.assertEquals(2, addNewHistoryResultObserver.addNewResult.lwdid)
-        Assert.assertEquals(1, addNewHistoryResultObserver.addNewResult.wid.size)
-        Assert.assertEquals(2, addNewHistoryResultObserver.addNewResult.wid[0])
+        Assert.assertNotNull(addNewLocationWeatherHistoryResultObserver.addNewResult)
+        Assert.assertEquals(2, addNewLocationWeatherHistoryResultObserver.addNewResult.lwdid)
+        Assert.assertEquals(1, addNewLocationWeatherHistoryResultObserver.addNewResult.wid.size)
+        Assert.assertEquals(2, addNewLocationWeatherHistoryResultObserver.addNewResult.wid[0])
 
         addNewLocationWeather.dispose()
     }
@@ -74,17 +74,17 @@ class LocationWeatherDbIntegrationTest {
 
         //Act - get all records
         val waitObject = Object()
-        val getLocationWeatherHistory = GetHistory(testDependencyInjectionTarget.locationWeatherHistoryRepository)
-        val getLocationWeatherAllHistoryResultObserver: GetHistoryResultObserver?
-        getLocationWeatherAllHistoryResultObserver = GetHistoryResultObserver(waitObject)
-        getLocationWeatherHistory.execute(getLocationWeatherAllHistoryResultObserver, null)
-        getLocationWeatherAllHistoryResultObserver.awaitCompletion(5000)
+        val getLocationWeatherHistory = GetLocationWeatherHistory(testDependencyInjectionTarget.locationWeatherHistoryRepository)
+        val getLocationWeatherAllLocationWeatherHistoryResultObserver: GetLocationWeatherHistoryResultObserver?
+        getLocationWeatherAllLocationWeatherHistoryResultObserver = GetLocationWeatherHistoryResultObserver(waitObject)
+        getLocationWeatherHistory.execute(getLocationWeatherAllLocationWeatherHistoryResultObserver, null)
+        getLocationWeatherAllLocationWeatherHistoryResultObserver.awaitCompletion(5000)
 
         //Assert - should match input DTOs from insert()
-        Assert.assertNotNull(getLocationWeatherAllHistoryResultObserver.resultList)
-        Assert.assertEquals(2, getLocationWeatherAllHistoryResultObserver.resultList.size)
-        Assert.assertEquals(Util.Fixed.mockLW[0], getLocationWeatherAllHistoryResultObserver.resultList[0])
-        Assert.assertEquals(Util.Fixed.mockLW[1], getLocationWeatherAllHistoryResultObserver.resultList[1])
+        Assert.assertNotNull(getLocationWeatherAllLocationWeatherHistoryResultObserver.resultList)
+        Assert.assertEquals(2, getLocationWeatherAllLocationWeatherHistoryResultObserver.resultList.size)
+        Assert.assertEquals(Util.Fixed.mockLW[0], getLocationWeatherAllLocationWeatherHistoryResultObserver.resultList[0])
+        Assert.assertEquals(Util.Fixed.mockLW[1], getLocationWeatherAllLocationWeatherHistoryResultObserver.resultList[1])
 
         getLocationWeatherHistory.dispose()
     }
@@ -102,27 +102,27 @@ class LocationWeatherDbIntegrationTest {
 
         //Act - delete first
         val waitObject = Object()
-        val deleteLocationWeatherHistory = DeleteHistory(testDependencyInjectionTarget.locationWeatherHistoryRepository)
-        var deleteLocationWeatherHistoryResultObserver: DeleteHistoryResultObserver?
-        deleteLocationWeatherHistoryResultObserver = DeleteHistoryResultObserver(waitObject)
-        deleteLocationWeatherHistory.execute(deleteLocationWeatherHistoryResultObserver, 1) //the lwdid of the first insert
-        deleteLocationWeatherHistoryResultObserver.awaitCompletion(5000)
+        val deleteLocationWeatherHistory = DeleteLocationWeatherHistory(testDependencyInjectionTarget.locationWeatherHistoryRepository)
+        var deleteLocationWeatherLocationWeatherHistoryResultObserver: DeleteLocationWeatherHistoryResultObserver?
+        deleteLocationWeatherLocationWeatherHistoryResultObserver = DeleteLocationWeatherHistoryResultObserver(waitObject)
+        deleteLocationWeatherHistory.execute(deleteLocationWeatherLocationWeatherHistoryResultObserver, 1) //the lwdid of the first insert
+        deleteLocationWeatherLocationWeatherHistoryResultObserver.awaitCompletion(5000)
 
         //Act - delete second
-        deleteLocationWeatherHistoryResultObserver = DeleteHistoryResultObserver(waitObject)
-        deleteLocationWeatherHistory.execute(deleteLocationWeatherHistoryResultObserver, 2) //the lwdid of the second insert
-        deleteLocationWeatherHistoryResultObserver.awaitCompletion(5000)
+        deleteLocationWeatherLocationWeatherHistoryResultObserver = DeleteLocationWeatherHistoryResultObserver(waitObject)
+        deleteLocationWeatherHistory.execute(deleteLocationWeatherLocationWeatherHistoryResultObserver, 2) //the lwdid of the second insert
+        deleteLocationWeatherLocationWeatherHistoryResultObserver.awaitCompletion(5000)
 
         //Act - get all records
-        val getLocationWeatherHistory = GetHistory(testDependencyInjectionTarget.locationWeatherHistoryRepository)
-        val getLocationWeatherAllHistoryResultObserver: GetHistoryResultObserver?
-        getLocationWeatherAllHistoryResultObserver = GetHistoryResultObserver(waitObject)
-        getLocationWeatherHistory.execute(getLocationWeatherAllHistoryResultObserver, null)
-        getLocationWeatherAllHistoryResultObserver.awaitCompletion(5000)
+        val getLocationWeatherHistory = GetLocationWeatherHistory(testDependencyInjectionTarget.locationWeatherHistoryRepository)
+        val getLocationWeatherAllLocationWeatherHistoryResultObserver: GetLocationWeatherHistoryResultObserver?
+        getLocationWeatherAllLocationWeatherHistoryResultObserver = GetLocationWeatherHistoryResultObserver(waitObject)
+        getLocationWeatherHistory.execute(getLocationWeatherAllLocationWeatherHistoryResultObserver, null)
+        getLocationWeatherAllLocationWeatherHistoryResultObserver.awaitCompletion(5000)
 
         //Assert - should now be emmpty
-        Assert.assertNotNull(getLocationWeatherAllHistoryResultObserver.resultList)
-        Assert.assertEquals(0, getLocationWeatherAllHistoryResultObserver.resultList.size)
+        Assert.assertNotNull(getLocationWeatherAllLocationWeatherHistoryResultObserver.resultList)
+        Assert.assertEquals(0, getLocationWeatherAllLocationWeatherHistoryResultObserver.resultList.size)
 
         deleteLocationWeatherHistory.dispose()
         getLocationWeatherHistory.dispose()

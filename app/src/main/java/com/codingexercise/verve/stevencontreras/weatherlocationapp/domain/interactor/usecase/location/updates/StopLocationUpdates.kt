@@ -1,0 +1,3 @@
+package com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.interactor.usecase.location.updates
+
+class StopLocationUpdates

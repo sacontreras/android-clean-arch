@@ -4,7 +4,7 @@ import android.arch.persistence.room.Embedded
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.ForeignKey
 import android.arch.persistence.room.PrimaryKey
-import com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.model.Weather
+import com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.model.location.weather.Weather
 
 @Entity(
     tableName = "weather",
@@ -18,11 +18,11 @@ import com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.model.
     )
 )
 data class WeatherEntity @JvmOverloads constructor(
-    @PrimaryKey(autoGenerate = true)
+        @PrimaryKey(autoGenerate = true)
     var wId: Long? = null,
 
-    @Embedded
+        @Embedded
     var weather: Weather? = null,
 
-    var fk_lwdId: Long? = null
+        var fk_lwdId: Long? = null
 )

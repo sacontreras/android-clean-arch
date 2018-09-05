@@ -6,8 +6,8 @@ import android.util.Log
 import com.codingexercise.verve.stevencontreras.weatherlocationapp.data.repository.locationweatherhistory.database.dao.LocationWeatherDb
 import com.codingexercise.verve.stevencontreras.weatherlocationapp.data.repository.locationweatherhistory.database.model.LocationWeatherDetailsEntity
 import com.codingexercise.verve.stevencontreras.weatherlocationapp.data.repository.locationweatherhistory.database.model.WeatherEntity
-import com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.model.LocationWeather
-import com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.model.Weather
+import com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.model.location.weather.LocationWeather
+import com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.model.location.weather.Weather
 import com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.repository.AddNewException
 import com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.repository.AddNewResult
 import com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.repository.LocationWeatherHistoryRepository

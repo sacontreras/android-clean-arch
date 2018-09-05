@@ -3,8 +3,10 @@ package com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.inter
 import io.reactivex.observers.DisposableObserver
 
 open class ReactiveUseCaseResultObserver<TResult>(
-        open val waitObj: Object? = null
+    open val waitObj: Object? = null
 ): DisposableObserver<TResult>() {
+    constructor(): this(waitObj = Object())
+
     override fun onComplete() { //if overridden, call super AFTER your impl in order to signal
         synchronized(waitObj!!) {
             waitObj!!.notifyAll()

@@ -3,6 +3,8 @@ package com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.model
 import android.support.test.runner.AndroidJUnit4
 import com.codingexercise.verve.stevencontreras.weatherlocationapp.common.mock.Util
 import com.codingexercise.verve.stevencontreras.weatherlocationapp.data.repository.locationweatherhistory.database.model.LocationWeatherDetailsEntity
+import com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.model.location.Coord
+import com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.model.location.weather.*
 import junit.framework.Assert.assertEquals
 import org.junit.Assert
 import org.junit.Test

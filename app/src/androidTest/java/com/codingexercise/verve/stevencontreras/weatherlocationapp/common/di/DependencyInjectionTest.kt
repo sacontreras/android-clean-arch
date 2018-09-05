@@ -32,7 +32,7 @@ class DependencyInjectionTest {
         testDependenciesComponent.inject(testDependencyInjectionTarget)
 
         assert(testDependencyInjectionTarget.context != null)
-        Assert.assertNotNull(testDependencyInjectionTarget.locationWeatherProviderRepository)
+        Assert.assertNotNull(testDependencyInjectionTarget.locationWeatherProvider)
         Assert.assertNotNull(testDependencyInjectionTarget.locationWeatherHistoryRepository)
     }
 }

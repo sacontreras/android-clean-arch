@@ -1,7 +1,7 @@
 package com.codingexercise.verve.stevencontreras.weatherlocationapp.data.repository.locationweatherprovider.webserviceclient
 
-import com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.model.LocationWeather
-import com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.repository.LocationWeatherProviderRepository
+import com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.model.location.weather.LocationWeather
+import com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.repository.LocationWeatherProvider
 import io.reactivex.Observable
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -13,7 +13,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-class LocationWeatherWebServiceClient(private val key: String): LocationWeatherProviderRepository {
+class LocationWeatherWebServiceClient(private val key: String): LocationWeatherProvider {
     companion object {
         const val BASE_URL: String = "https://api.openweathermap.org"
     }
