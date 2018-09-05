@@ -9,8 +9,12 @@ buildscript {
         rxandroid: '2.1.0',
         rxkotlin: '2.3.0',
         andro_arch: '1.1.1',
+        modelmapper: '2.2.0',
+        anko: '0.10.3',
         paging: '1.0.1',
-        retrofit: '2.3.0'
+        retrofit: '2.3.0',
+        googlemaps: '15.0.1',
+        picasso: '2.71828'
     ]
 
     repositories {

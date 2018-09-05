@@ -5,6 +5,10 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
 data class LocationWeather @JvmOverloads constructor(
+    @SerializedName("timestamp")
+    @Expose
+    var timestamp: Long? = null,
+
     @SerializedName("coord")
     @Expose
     var coord: Coord? = null,

@@ -6,40 +6,37 @@ import com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.model.
 
 @Entity(tableName = "locationweatherdetails")
 data class LocationWeatherDetailsEntity @JvmOverloads constructor(
-        @PrimaryKey(autoGenerate = true)
+    @PrimaryKey(autoGenerate = true)
     var lwdId: Long? = null,
 
-    //    @ColumnInfo(typeAffinity = ColumnInfo.INTEGER)
-    //    @TypeConverters(DateConverter::class)
-    //    var timestamp: Date = Date(System.currentTimeMillis()),
-        var timestamp: Long = System.currentTimeMillis(),
+    var timestamp: Long = System.currentTimeMillis(),
 
-        @Embedded(prefix = "coord_")
+    @Embedded(prefix = "coord_")
     var coord: Coord? = null,
 
     //one-to-many relationship from this to WeatherEntity - but not embedded! we need to compose
 
-        var base: String? = null,
+    var base: String? = null,
 
-        @Embedded(prefix = "main_")
+    @Embedded(prefix = "main_")
     var main: Main? = null,
 
-        var visibility: Double? = null,
+    var visibility: Double? = null,
 
-        @Embedded(prefix = "wind_")
+    @Embedded(prefix = "wind_")
     var wind: Wind? = null,
 
-        @Embedded(prefix = "clouds_")
+    @Embedded(prefix = "clouds_")
     var clouds: Clouds? = null,
 
-        var dt: Int? = null,
+    var dt: Int? = null,
 
-        @Embedded(prefix = "sys_")
+    @Embedded(prefix = "sys_")
     var sys: Sys? = null,
 
-        var id: Int? = null,
+    var id: Int? = null,
 
-        var name: String? = null,
+    var name: String? = null,
 
-        var cod: Int? = null
+    var cod: Int? = null
 )

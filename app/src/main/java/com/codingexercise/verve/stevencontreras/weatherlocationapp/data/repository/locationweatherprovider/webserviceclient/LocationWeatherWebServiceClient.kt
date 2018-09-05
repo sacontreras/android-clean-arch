@@ -23,6 +23,7 @@ class LocationWeatherWebServiceClient(private val key: String): LocationWeatherP
         fun getCurrentLocationWeather(
             @Query("lon") lon: Double,
             @Query("lat") lat: Double,
+            @Query("units") units: String,
             @Query("APPID") appId: String
         ): Call<LocationWeather>
     }
@@ -44,12 +45,14 @@ class LocationWeatherWebServiceClient(private val key: String): LocationWeatherP
     override fun get(lon: Double, lat: Double): Observable<LocationWeather> {
         return Observable.create<LocationWeather> { emitter ->
             try {
-                val call_getCurrentLocationWeather = locationWeatherWebServiceClient.getCurrentLocationWeather(lon, lat, key)
+                val call_getCurrentLocationWeather = locationWeatherWebServiceClient.getCurrentLocationWeather(lon, lat, "imperial", key)
                 //val response = call_getCurrentLocationWeather.execute()
                 call_getCurrentLocationWeather.enqueue(
                     object: Callback<LocationWeather> {
                         override fun onResponse(call: Call<LocationWeather>, response: Response<LocationWeather>) {
-                            emitter.onNext(response.body()!!)
+                            val locationWeather = response.body()!!
+                            locationWeather.timestamp = System.currentTimeMillis()
+                            emitter.onNext(locationWeather)
                             emitter.onComplete()
                         }
 

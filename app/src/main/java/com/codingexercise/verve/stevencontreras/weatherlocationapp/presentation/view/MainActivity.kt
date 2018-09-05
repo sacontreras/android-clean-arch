@@ -1,14 +1,13 @@
 package com.codingexercise.verve.stevencontreras.weatherlocationapp.presentation.view
 
 import android.annotation.TargetApi
-import android.content.Context
 import android.content.DialogInterface
-import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.Snackbar
-import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -22,7 +21,6 @@ import com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.intera
 import com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.interactor.usecase.location.weather.history.AddNewLocationWeatherHistoryResultObserver
 import com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.interactor.usecase.location.weather.history.GetLocationWeatherHistory
 import com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.interactor.usecase.location.weather.history.GetLocationWeatherHistoryResultObserver
-import com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.model.location.Coord
 import com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.model.location.event.Event
 import com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.model.location.event.LocationEvent
 import com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.model.location.weather.LocationWeather
@@ -34,6 +32,7 @@ import com.codingexercise.verve.stevencontreras.weatherlocationapp.presentation.
 import com.codingexercise.verve.stevencontreras.weatherlocationapp.presentation.common.util.Permissions
 
 import kotlinx.android.synthetic.main.activity_main.*
+import org.jetbrains.anko.find
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
@@ -52,6 +51,9 @@ class MainActivity : AppCompatActivity() {
     private var missingPermissions = ArrayList<String>()
     private var rejectedPermissions = ArrayList<String>()
 
+    private lateinit var rv_locweatherhistory: RecyclerView
+    private var rv_locweatherhistory_adapter: MyRecyclerViewAdapter? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +61,9 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         (application as WeatherLocApp).getWeatherLocAppComponent().inject(this)
+
+        rv_locweatherhistory = find(R.id.rv_locweatherhistory)
+        rv_locweatherhistory.layoutManager = LinearLayoutManager(this)
 
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Location Service", Snackbar.LENGTH_LONG)
@@ -200,6 +205,10 @@ class MainActivity : AppCompatActivity() {
             super.onNext(t)
             for ((i, locationWeather) in t.withIndex()) {
                 Log.d(TAG, String.format("MyGetLocationWeatherHistoryResultObserver::onNext: locationWeather[%d]: %s", i, locationWeather.toString()))
+                activity.runOnUiThread {
+                    activity.rv_locweatherhistory_adapter = MyRecyclerViewAdapter(activity, t)
+                    activity.rv_locweatherhistory.adapter = activity.rv_locweatherhistory_adapter
+                }
             }
         }
 
