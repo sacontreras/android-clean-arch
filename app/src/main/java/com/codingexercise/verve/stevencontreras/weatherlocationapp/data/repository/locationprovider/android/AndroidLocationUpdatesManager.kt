@@ -21,7 +21,7 @@ class AndroidLocationUpdatesManager(private val context: Context, private val ob
         private val TAG = AndroidLocationUpdatesManager::class.java.canonicalName
 
         private val UPDATE_TRIGGER__DISTANCE_DELTA: Long = 1 //in meters
-        private val UPDATE_TRIGGER__TIME_DELTA: Long = 500  //in milliseconds
+        private val UPDATE_TRIGGER__TIME_DELTA: Long = 30000  //in milliseconds
     }
 
     private val androidLocationListener: LocationListener = object: LocationListener {
