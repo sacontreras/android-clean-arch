@@ -1,6 +1,5 @@
 package com.codingexercise.verve.stevencontreras.weatherlocationapp.data.repository.locationweatherhistory.database.dao
 
-import android.arch.persistence.db.SupportSQLiteOpenHelper
 import android.arch.persistence.room.*
 import android.content.Context
 import com.codingexercise.verve.stevencontreras.weatherlocationapp.data.repository.locationweatherhistory.database.model.LocationWeatherDetailsEntity

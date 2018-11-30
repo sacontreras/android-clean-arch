@@ -18,11 +18,11 @@ import com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.model.
     )
 )
 data class WeatherEntity @JvmOverloads constructor(
-        @PrimaryKey(autoGenerate = true)
+    @PrimaryKey(autoGenerate = true)
     var wId: Long? = null,
 
-        @Embedded
+    @Embedded
     var weather: Weather? = null,
 
-        var fk_lwdId: Long? = null
+    var fk_lwdId: Long? = null
 )

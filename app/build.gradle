@@ -97,6 +97,7 @@ dependencies {
     testImplementation "android.arch.core:core-testing:$versions.andro_arch"
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    androidTestImplementation 'com.android.support.test:rules:1.0.2'
 
     //kaptTest and kaptAndroidTest enables annotation processors for androidTest - in order for us to use dagger DI therein
     kaptTest "com.google.dagger:dagger-compiler:$versions.dagger"

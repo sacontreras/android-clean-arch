@@ -16,8 +16,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
 
         <service android:name=".data.repository.locationprovider.android.FGS" />
 
@@ -28,6 +29,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -42,6 +44,12 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+
+        <provider
+            android:name=".data.repository.locationweatherhistory.database.LocationWeatherHistoryContentProvider"
+            android:authorities="com.codingexercise.verve.stevencontreras.weatherlocationapp.data.repository.locationweatherhistory.database.LocationWeatherHistoryContentProvider"
+            android:enabled="true"
+            android:exported="true" />
     </application>
 
 </manifest>

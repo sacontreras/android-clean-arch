@@ -1,6 +1,7 @@
 package com.codingexercise.verve.stevencontreras.weatherlocationapp.data.repository.locationweatherhistory.database.dao
 
 import android.support.test.InstrumentationRegistry
+import android.support.test.rule.provider.ProviderTestRule
 import android.support.test.runner.AndroidJUnit4
 import android.util.Log
 import com.codingexercise.verve.stevencontreras.weatherlocationapp.common.di.ContextModule
@@ -8,37 +9,37 @@ import com.codingexercise.verve.stevencontreras.weatherlocationapp.common.di.Dag
 import com.codingexercise.verve.stevencontreras.weatherlocationapp.common.di.DependencyInjectionTarget
 import com.codingexercise.verve.stevencontreras.weatherlocationapp.common.di.TestDependenciesComponent
 import com.codingexercise.verve.stevencontreras.weatherlocationapp.common.mock.Util
+import com.codingexercise.verve.stevencontreras.weatherlocationapp.data.repository.locationweatherhistory.database.LocationWeatherHistoryContentProvider
 import com.codingexercise.verve.stevencontreras.weatherlocationapp.data.repository.locationweatherhistory.database.di.LocationWeatherDatabaseClientModule
 import com.codingexercise.verve.stevencontreras.weatherlocationapp.data.repository.locationweatherprovider.webserviceclient.di.LocationWeatherWebServiceClientModule
-import com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.interactor.usecase.location.weather.history.AddNewLocationWeatherHistory
-import com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.interactor.usecase.location.weather.history.AddNewLocationWeatherHistoryResultObserver
-import com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.interactor.usecase.location.weather.history.DeleteLocationWeatherHistory
-import com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.interactor.usecase.location.weather.history.DeleteLocationWeatherHistoryResultObserver
-import com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.interactor.usecase.location.weather.history.GetLocationWeatherHistory
-import com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.interactor.usecase.location.weather.history.GetLocationWeatherHistoryResultObserver
+import com.codingexercise.verve.stevencontreras.weatherlocationapp.domain.interactor.usecase.location.weather.history.*
 import junit.framework.Assert
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.util.*
 
-//@RunWith(AndroidJUnit4::class)
-class LocationWeatherDbIntegrationTest {
-
+@RunWith(AndroidJUnit4::class)
+class LocationWeatherHistoryContentProviderIntegrationTest {
     companion object {
-        val TAG = LocationWeatherDbIntegrationTest::class.java.simpleName
+        val TAG = LocationWeatherHistoryContentProviderIntegrationTest::class.java.simpleName
     }
 
-    //@Test
-    fun insert() {
+    @get:Rule
+    val locationWeatherHistoryProviderRule: ProviderTestRule = ProviderTestRule.Builder(LocationWeatherHistoryContentProvider::class.java, LocationWeatherHistoryContentProvider.AUTHORITY).build()
+
+    @Test
+    fun query() {
+        /***************** first must insert - BEGIN *****************/
         //Arrange
         val properties = Properties()
         properties.load(InstrumentationRegistry.getTargetContext().assets.open("application.properties"))
         val apikey = properties.getProperty("lws.apikey") ?: ""
         val testDependenciesComponent: TestDependenciesComponent = DaggerTestDependenciesComponent.builder()
-            .contextModule(ContextModule(InstrumentationRegistry.getTargetContext()))
-            .locationWeatherWebServiceClientModule(LocationWeatherWebServiceClientModule(apikey))
-            .locationWeatherDatabaseClientModule(LocationWeatherDatabaseClientModule(InstrumentationRegistry.getTargetContext()))
-            .build()
+                .contextModule(ContextModule(InstrumentationRegistry.getTargetContext()))
+                .locationWeatherWebServiceClientModule(LocationWeatherWebServiceClientModule(apikey))
+                .locationWeatherDatabaseClientModule(LocationWeatherDatabaseClientModule(InstrumentationRegistry.getTargetContext()))
+                .build()
         val testDependencyInjectionTarget = DependencyInjectionTarget()
         testDependenciesComponent.inject(testDependencyInjectionTarget)
         val waitObject = Object()
@@ -68,26 +69,11 @@ class LocationWeatherDbIntegrationTest {
         Assert.assertEquals(2, addNewLocationWeatherHistoryResultObserver.addNewResult.wid[0])
 
         addNewLocationWeather.dispose()
-    }
+        /***************** first must insert - END *****************/
 
-    //@Test
-    fun get() {
-        //Arrange
-        val properties = Properties()
-        properties.load(InstrumentationRegistry.getTargetContext().assets.open("application.properties"))
-        val apikey = properties.getProperty("lws.apikey") ?: ""
-        val testDependenciesComponent: TestDependenciesComponent = DaggerTestDependenciesComponent.builder()
-            .contextModule(ContextModule(InstrumentationRegistry.getTargetContext()))
-            .locationWeatherWebServiceClientModule(LocationWeatherWebServiceClientModule(apikey))
-            .locationWeatherDatabaseClientModule(LocationWeatherDatabaseClientModule(InstrumentationRegistry.getTargetContext()))
-            .build()
-        val testDependencyInjectionTarget = DependencyInjectionTarget()
-        testDependenciesComponent.inject(testDependencyInjectionTarget)
-
-        //Act - get all records
-        val waitObject = Object()
-        val getLocationWeatherHistory = GetLocationWeatherHistory(testDependencyInjectionTarget.locationWeatherHistoryRepository)
-        val getLocationWeatherAllLocationWeatherHistoryResultObserver: GetLocationWeatherHistoryResultObserver?
+        /***************** now must assert insert via get - BEGIN *****************/
+        var getLocationWeatherHistory = GetLocationWeatherHistory(testDependencyInjectionTarget.locationWeatherHistoryRepository)
+        var getLocationWeatherAllLocationWeatherHistoryResultObserver: GetLocationWeatherHistoryResultObserver?
         getLocationWeatherAllLocationWeatherHistoryResultObserver = GetLocationWeatherHistoryResultObserver(waitObject)
         getLocationWeatherHistory.execute(getLocationWeatherAllLocationWeatherHistoryResultObserver, null)
         getLocationWeatherAllLocationWeatherHistoryResultObserver.awaitCompletion(5000)
@@ -95,36 +81,44 @@ class LocationWeatherDbIntegrationTest {
         //Assert - should match input DTOs from insert()
         Assert.assertNotNull(getLocationWeatherAllLocationWeatherHistoryResultObserver.resultList)
         Assert.assertEquals(2, getLocationWeatherAllLocationWeatherHistoryResultObserver.resultList.size)
-        Util.Fixed.mockLW[0].timestamp = 0
-        Log.d(TAG, String.format("get: Util.Fixed.mockLW[0]: %s", Util.Fixed.mockLW[0]))
-        getLocationWeatherAllLocationWeatherHistoryResultObserver.resultList[0].timestamp = 0
-        Log.d(TAG, String.format("get: getLocationWeatherAllLocationWeatherHistoryResultObserver.resultList[0]: %s", getLocationWeatherAllLocationWeatherHistoryResultObserver.resultList[0]))
+        var now = System.currentTimeMillis()
+        Util.Fixed.mockLW[0].timestamp = now
+        Log.d(TAG, String.format("query: Util.Fixed.mockLW[0]: %s", Util.Fixed.mockLW[0]))
+        getLocationWeatherAllLocationWeatherHistoryResultObserver.resultList[0].timestamp = now
+        Log.d(TAG, String.format("query: getLocationWeatherAllLocationWeatherHistoryResultObserver.resultList[0]: %s", getLocationWeatherAllLocationWeatherHistoryResultObserver.resultList[0]))
         Assert.assertEquals(Util.Fixed.mockLW[0], getLocationWeatherAllLocationWeatherHistoryResultObserver.resultList[0])
-        Util.Fixed.mockLW[1].timestamp = 0
-        Log.d(TAG, String.format("get: Util.Fixed.mockLW[1]: %s", Util.Fixed.mockLW[1]))
-        getLocationWeatherAllLocationWeatherHistoryResultObserver.resultList[1].timestamp = 0
-        Log.d(TAG, String.format("get: getLocationWeatherAllLocationWeatherHistoryResultObserver.resultList[1]: %s", getLocationWeatherAllLocationWeatherHistoryResultObserver.resultList[1]))
+        now = System.currentTimeMillis()
+        Util.Fixed.mockLW[1].timestamp = now
+        Log.d(TAG, String.format("query: Util.Fixed.mockLW[1]: %s", Util.Fixed.mockLW[1]))
+        getLocationWeatherAllLocationWeatherHistoryResultObserver.resultList[1].timestamp = now
+        Log.d(TAG, String.format("query: getLocationWeatherAllLocationWeatherHistoryResultObserver.resultList[1]: %s", getLocationWeatherAllLocationWeatherHistoryResultObserver.resultList[1]))
         Assert.assertEquals(Util.Fixed.mockLW[1], getLocationWeatherAllLocationWeatherHistoryResultObserver.resultList[1])
 
         getLocationWeatherHistory.dispose()
-    }
+        /***************** now must assert insert via get - END *****************/
 
-    //@Test
-    fun delete() {
-        //Arrange
-        val properties = Properties()
-        properties.load(InstrumentationRegistry.getTargetContext().assets.open("application.properties"))
-        val apikey = properties.getProperty("lws.apikey") ?: ""
-        val testDependenciesComponent: TestDependenciesComponent = DaggerTestDependenciesComponent.builder()
-            .contextModule(ContextModule(InstrumentationRegistry.getTargetContext()))
-            .locationWeatherWebServiceClientModule(LocationWeatherWebServiceClientModule(apikey))
-            .locationWeatherDatabaseClientModule(LocationWeatherDatabaseClientModule(InstrumentationRegistry.getTargetContext()))
-            .build()
-        val testDependencyInjectionTarget = DependencyInjectionTarget()
-        testDependenciesComponent.inject(testDependencyInjectionTarget)
+        /***************** now query content provider - BEGIN *****************/
+        val locationWeatherHistoryContentResolver = locationWeatherHistoryProviderRule.resolver
+        val cursor = locationWeatherHistoryContentResolver.query(LocationWeatherHistoryContentProvider.CONTENT_URI, null, null, null, null)
+        Log.d(TAG, String.format("query: cursor from locationWeatherHistoryContentResolver.query() has %d records", cursor.count))
+        if (cursor?.count!! > 0) {
+            cursor.moveToFirst()
 
-        //Act - delete first
-        val waitObject = Object()
+            for ((m, scol) in cursor.columnNames.withIndex()) {
+                var tcol = cursor.getType(m)
+                var ncol = cursor.getColumnName(m)
+                Log.d(TAG, String.format("query: column %d - name: \"%s\", type: %s ", m, ncol, tcol))
+            }
+
+            var n = 0
+            do {
+                n++
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        /***************** now query content provider - END *****************/
+
+        /***************** finally must delete - BEGIN *****************/
         val deleteLocationWeatherHistory = DeleteLocationWeatherHistory(testDependencyInjectionTarget.locationWeatherHistoryRepository)
         var deleteLocationWeatherLocationWeatherHistoryResultObserver: DeleteLocationWeatherHistoryResultObserver?
         deleteLocationWeatherLocationWeatherHistoryResultObserver = DeleteLocationWeatherHistoryResultObserver(waitObject)
@@ -137,8 +131,7 @@ class LocationWeatherDbIntegrationTest {
         deleteLocationWeatherLocationWeatherHistoryResultObserver.awaitCompletion(5000)
 
         //Act - get all records
-        val getLocationWeatherHistory = GetLocationWeatherHistory(testDependencyInjectionTarget.locationWeatherHistoryRepository)
-        val getLocationWeatherAllLocationWeatherHistoryResultObserver: GetLocationWeatherHistoryResultObserver?
+        getLocationWeatherHistory = GetLocationWeatherHistory(testDependencyInjectionTarget.locationWeatherHistoryRepository)
         getLocationWeatherAllLocationWeatherHistoryResultObserver = GetLocationWeatherHistoryResultObserver(waitObject)
         getLocationWeatherHistory.execute(getLocationWeatherAllLocationWeatherHistoryResultObserver, null)
         getLocationWeatherAllLocationWeatherHistoryResultObserver.awaitCompletion(5000)
@@ -149,5 +142,6 @@ class LocationWeatherDbIntegrationTest {
 
         deleteLocationWeatherHistory.dispose()
         getLocationWeatherHistory.dispose()
+        /***************** finally must delete - END *****************/
     }
 }
